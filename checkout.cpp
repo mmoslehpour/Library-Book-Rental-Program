@@ -299,7 +299,7 @@ void closeCard(vector<Person *> &myCardholders, int id) {
 	char choice;
 
 	Person * personPtr = askCardID(myCardholders);
-	
+
 	cout << "Please enter the card ID: " << endl;
 	cin >> id;
 
@@ -372,10 +372,14 @@ int main()
     vector<Book *> books;
     vector<Person *> cardholders;
 
+    int choice;
+    int nextID;
+
     readBooks(books);
     readPersons(cardholders);
+    nextID = readPersons(cardholders);
     
-    int choice;
+
     do
     {
         // If you use cin anywhere, don't forget that you have to handle the <ENTER> key that 
