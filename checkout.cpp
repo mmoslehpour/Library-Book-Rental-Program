@@ -42,18 +42,17 @@ int askCardID(vector<Person *> myCardholders) {
 			return cardNo;
 		}
 
-		else if (cardNo == NULL) {
+		else {
 			cout << "Card ID not found. " << endl;
-			return nullptr;
 		}
 	}
-
+	return 0;
 }
 
 // repeated part: asking user book ID
 int askBookID(vector<Book *> myBooks) {
 
-	int id;
+	int id = 0;
 
 	cout << "Please enter the book ID: " << endl;
 	cin >> id;
@@ -62,15 +61,15 @@ int askBookID(vector<Book *> myBooks) {
 		if(myBooks[i] -> getId() == id) {
 			return id;
 		}
-		else if (id == NULL) {
+		else {
 			cout << "Book ID not found. " << endl;
-			return nullptr;
 		}
 	}
+	return 0;
 }
 
 
-
+// reading info inside Book
 void readBooks(vector<Book *> & myBooks) {
 
     int id;
@@ -99,7 +98,7 @@ void readBooks(vector<Book *> & myBooks) {
 }
 
 
-
+// reading info inside person
 int readPersons(vector<Person *> & myCardholders) {
 
     string fName, lName;
@@ -116,16 +115,14 @@ int readPersons(vector<Person *> & myCardholders) {
         exit(1);
     }
 
-    int temp = 0;
 
-    while (file >> fName >> lName >> cardNo >> act) {
-        Person * personPtr;
-        personPtr = new Person (fName, lName, cardNo, act);
+    while (file >> cardNo >> act>> fName >> lName ) {
+        personPtr = new Person (cardNo,act, fName, lName);
         myCardholders.push_back(personPtr);
 
     }
+    delete personPtr;
     file.close();
-
 
     return 0;
 }
@@ -169,11 +166,11 @@ void readRentals(vector<Book *> & myBooks, vector<Person *> myCardholders) {
 // 1. book chechout
 void bookCheckout(vector<Book *> myBooks, vector<Person *> myCardholders) {
 	
-	Person * personPtr = askCardID(myCardholders);
+	int askcard;
+	int id;
 
-	if (personPtr != NULL) {
-		Book * b = searchBook(myBooks, askBookID(myBooks));
-	}
+	Person *personPtr = nullptr;
+	askcard = askCardID(myCardholders);
 
 	for (int i = 0; i < myBooks.size(); i++) {
 		if (myBooks[i] -> getId() == id) {
@@ -197,7 +194,11 @@ void bookCheckout(vector<Book *> myBooks, vector<Person *> myCardholders) {
 // 2. book return
 void bookReturn(vector<Book *> myBooks) {
 
-	Person * personPtr = askBookID(myBooks);
+	int id;
+	int askbook;
+
+	Person *personPtr = nullptr;
+	askbook = askBookID(myBooks);
 
 	for (int i = 0; i < myBooks.size(); i++) {
 		if (id == myBooks[i]->getId()) {
@@ -222,10 +223,12 @@ void availbleBook(vector<Book *> myBooks) {
 			cout << "Author: " << myBooks[i] -> getAuthor() << endl;
 			cout << "Category: " << myBooks[i] -> getCategory() << endl;
 		}
-	}
-	if (myBooks[i] == 0) {
+
+		else if (myBooks[i] == 0) {
 		cout << "No availble books. " << endl;
+		}
 	}
+
 }
 
 // 4. view all outstanding rentals
@@ -251,9 +254,10 @@ void outstandingRental (vector<Book *> myBooks) {
 
 // 5. view outstanding rental for a cardholder
 void cardholderOutstanding (vector<Book *> &myBooks, vector<Person *> &myCardholders) {
-	int count = 0
+	int count = 0;
+	int askcard;
 
-	Person * personPtr = askCardID(myCardholders);
+	askcard = askCardID(myCardholders);
 
 	for (int i = 0; i < myBooks.size(); i++) {
 		if (myBooks[i] -> getPersonPtr() != nullptr) {
@@ -261,7 +265,7 @@ void cardholderOutstanding (vector<Book *> &myBooks, vector<Person *> &myCardhol
 			cout << "Title: " << myBooks[i] -> getTitle() << endl;
 			cout << "Author: " << myBooks[i] -> getAuthor() << endl;
 
-			cout ++;
+			count ++;
 		}
 	}
 
@@ -294,18 +298,19 @@ void openCard(vector<Person *> & myCardholders, int nextID) {
 }
 
 // 7. close library card
-void closeCard(vector<Person *> &myCardholders, int id) {
+void closeCard(vector<Person *> &myCardholders) {
 
 	char choice;
+	int id, askcard;
 
-	Person * personPtr = askCardID(myCardholders);
+	askcard = askCardID(myCardholders);
 
 	cout << "Please enter the card ID: " << endl;
 	cin >> id;
 
 	for (int i = 0; i < myCardholders.size(); i++) {
 
-		if (personPtr -> isActive()) {
+		if (myCardholders[i] -> isActive()) {
 			cout << "Cardholder: " << myCardholders[i] -> fullName() << endl;
 		}
 
@@ -314,7 +319,7 @@ void closeCard(vector<Person *> &myCardholders, int id) {
 			cin >> choice;
 
 			if (choice == 'y' || choice == 'Y') {
-				personPtr -> setActive(0);
+				myCardholders[i] -> setActive(0);
 				cout << "Card ID deactivated. " << endl;
 			}
 		}
@@ -323,7 +328,7 @@ void closeCard(vector<Person *> &myCardholders, int id) {
 }
 
 // 8. update
-void update(vector<Book *> myCardholders, vetor<Book *> myBooks) {
+void update(vector<Book *> myBooks, vector<Person *> myCardholders) {
 
 	ofstream file;
 	file.open("persons.txt");
@@ -413,7 +418,7 @@ int main()
                 break;
 
             case 7:
-                close(cardholders);
+                closeCard(cardholders);
                 break;
                 
             case 8:
