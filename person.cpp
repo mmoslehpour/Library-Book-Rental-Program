@@ -3,8 +3,8 @@
 Person::Person(int cardNo, bool act, string fName, string lName) {
     firstName = fName;
     lastName = lName;
+    setActive(act);
     cardID = cardNo;
-    active = act;
     // complete constructor
 }
 
@@ -21,14 +21,10 @@ int Person::getId() {
 }
 
 void Person::setActive(bool act) {
-    act = true;
 } // complete
 
 bool Person::isActive() {
-    if (active) {
-         return true;
-    }
-    // complete
+    return true; // complete
 }
 
 string Person::fullName() {

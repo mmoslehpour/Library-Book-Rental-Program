@@ -23,9 +23,8 @@ int Book::getId() {
     return bookID; // complete
 }
 void Book::setPersonPtr(Person * ptr) {
-    personPtr = ptr;
 } // complete
 
 Person * Book::getPersonPtr() {
-    return personPtr; // complete
+    return nullptr; // complete
 }
